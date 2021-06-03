@@ -1,6 +1,6 @@
 #desafio backend 2
 from flask import Flask, request, redirect, url_for, render_template, jsonify, Response, make_response,abort
-from resources.db_func import Database as db
+from resources.db_func import Database
 from resources.controller import *
 import requests
 import re
@@ -9,6 +9,8 @@ import re
 app = Flask(__name__)
 app.config["DEBUG"] = True
 app.config['JSON_SORT_KEYS'] = False
+
+db = Database()
 
 @app.errorhandler(404)
 def page_not_found(error):
@@ -85,7 +87,7 @@ def metrics():
             try: 
                 last_quotes = int(request.args.get('last_quotes'))
             except:
-                print("aqui "+str(request.args.get('last_quotes').encode()) +"aqui")
+                #print("aqui "+str(request.args.get('last_quotes').encode()) +"aqui")
                 return jsonify({'mensagem':'Insira um valor numerico para a ultima cotação, na query last_quotes= ex: last_quotes=3'})
         #se existir querystring em last quote, usaremos o valor dela, caso contrário iremos exibir todos.
         return jsonify(db.metricas(last_quotes))
